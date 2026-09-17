@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trắc nghiệm định hướng — Trường Việt Anh</title>
+<style>
+:root{
+  --mint:#1D9E75; --mint-d:#0F6E56; --ink:#1a2e28; --muted:#5f6f68;
+  --line:#dfe8e3; --bg:#f4f8f6; --card:#ffffff; --amber:#B26B2C;
+  --pink:#D4537E; --pink2:#ED93B1; --pink3:#F4C0D1; --pinkink:#72243E;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding:20px 16px 60px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.brand .dot{width:34px;height:34px;border-radius:9px;background:var(--mint);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px}
+.brand .t{font-size:14px;color:var(--muted)}
+.brand .t b{color:var(--ink);display:block;font-size:15px}
+.bar{height:8px;background:#e3ece8;border-radius:20px;overflow:hidden;margin:8px 0}
+.bar>i{display:block;height:100%;width:0;background:var(--mint);border-radius:20px;transition:width .35s ease}
+.lab{display:flex;justify-content:space-between;align-items:baseline}
+.lab .l{font-size:16px;font-weight:600}
+.lab .p{font-size:12px;color:var(--muted)}
+.hint{font-size:13px;color:var(--muted);min-height:18px;margin-bottom:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.fld input{width:100%;height:42px;font-size:15px;border:1px solid var(--line);border-radius:9px;padding:0 12px}
+.row{padding:12px 0;border-bottom:1px solid var(--line)}
+.qt{font-size:14.5px;margin-bottom:9px}
+.sc{display:flex;gap:6px}
+.sb{flex:1;height:42px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:15px;cursor:pointer;color:var(--muted);transition:.12s}
+.sb.on{background:var(--mint);border-color:var(--mint-d);color:#fff;font-weight:600}
+.sl{display:flex;justify-content:space-between;font-size:10.5px;color:#9aa8a2;margin-top:4px}
+.vo{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:9px;margin-bottom:8px}
+.vl{flex:1;font-size:13.5px}
+.rb{width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#fff;font-size:13px;cursor:pointer;color:var(--muted)}
+.rb.on{background:var(--pink);border-color:var(--pinkink);color:#fff;font-weight:700}
+.btnrow{display:flex;gap:10px;margin-top:18px}
+.btn{flex:1;height:46px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer}
+.btn.primary{background:var(--mint);color:#fff}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{display:inline-block;background:#eaf5f0;color:var(--mint-d);font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;margin-bottom:8px}
+.result{text-align:center;padding:30px 20px}
+.result .code{font-size:32px;font-weight:800;color:var(--mint-d);margin:10px 0}
+.err{color:#c0392b;font-size:13px;margin-top:8px}
+#step-diem .row2{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+#step-diem .row2 input[type=text]{flex:1;height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px}
+#step-diem .row2 input[type=number]{width:80px;height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px}
+#step-diem .row2 button{border:none;background:#fdeceb;color:#c0392b;border-radius:8px;height:38px;width:38px;cursor:pointer}
+.addbtn{margin-top:6px;background:#fff;border:1px dashed var(--line);border-radius:9px;height:40px;width:100%;color:var(--muted);cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="dot">VA</div>
+    <div class="t"><b>Trắc nghiệm định hướng</b>Trường Việt Anh · Vui Vẻ &amp; Thực Dụng</div>
+  </div>
+
+  <div class="lab"><span class="l" id="stepTitle">Thông tin học sinh</span><span class="p" id="stepPct">0%</span></div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="hint" id="hint">Vài thông tin nhỏ trước khi bắt đầu nhé.</div>
+
+  <div class="card">
+
+    <div id="step-info">
+      <div class="fld"><label>Họ và tên học sinh</label><input id="ho_ten" placeholder="Nguyễn Văn A"></div>
+      <div class="fld"><label>Lớp</label><input id="lop" placeholder="11A2"></div>
+      <div class="fld"><label>Email giáo viên/phụ huynh nhận kết quả (không bắt buộc)</label><input id="email_gvcn" placeholder="gvcn@truongvietanh.com"></div>
+    </div>
+
+    <div id="step-holland" style="display:none"></div>
+    <div id="step-giatri" style="display:none"></div>
+
+    <div id="step-diem" style="display:none">
+      <div class="chip">Bảng điểm các môn</div>
+      <div id="diemRows"></div>
+      <button class="addbtn" onclick="addDiemRow()">+ Thêm môn</button>
+    </div>
+
+    <div id="step-result" style="display:none" class="result"></div>
+
+    <div class="btnrow" id="navRow">
+      <button class="btn ghost" id="btnBack" onclick="back()">Quay lại</button>
+      <button class="btn primary" id="btnNext" onclick="next()">Tiếp tục</button>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+</div>
+
+<script>
+const CHANG_TITLES = [
+  "Em thử hình dung mình đang...",
+  "Cuối tuần rảnh, em thấy hứng thú khi...",
+  "Trong các môn/hoạt động, em thích...",
+  "Nếu được chọn một nhiệm vụ, em chọn...",
+  "Em thấy mình hợp với...",
+  "Chặng cuối rồi! Em còn thấy mình..."
+];
+const SCALE_LABELS = ["Rất không thích","Không thích","Bình thường","Thích","Rất thích"];
+
+let quiz = null;
+let state = {
+  ho_ten:"", lop:"", email_gvcn:"",
+  holland_answers: {},
+  gia_tri_rankings: {0:{}, 1:{}, 2:{}},
+  diem_mon: {}
+};
+
+// steps: info -> holland(6 chặng) -> giatri(3 nhóm) -> diem -> result
+let phase = "info";
+let changIdx = 0;   // 0..5
+let gtIdx = 0;      // 0..2
+
+async function loadQuiz(){
+  const r = await fetch('/api/quiz');
+  quiz = await r.json();
+}
+
+function updateBar(pct, title){
+  document.getElementById('bar').style.width = pct+'%';
+  document.getElementById('stepPct').textContent = pct+'%';
+  document.getElementById('stepTitle').textContent = title;
+}
+
+function show(id){
+  ['step-info','step-holland','step-giatri','step-diem','step-result'].forEach(x=>{
+    document.getElementById(x).style.display = (x===id)?'block':'none';
+  });
+}
+
+function renderHolland(){
+  show('step-holland');
+  const qs = quiz.holland.filter(q=>q.chang === changIdx+1);
+  const box = document.getElementById('step-holland');
+  box.innerHTML = '<div class="chip">Chặng '+(changIdx+1)+' / 6</div><div style="font-size:14px;color:var(--muted);margin-bottom:10px">'+CHANG_TITLES[changIdx]+'</div>';
+  qs.forEach(q=>{
+    const row = document.createElement('div'); row.className='row';
+    const cur = state.holland_answers[q.id];
+    row.innerHTML = '<div class="qt">'+q.text+'</div>'+
+      '<div class="sc">'+[0,1,2,3,4].map(v=>'<button type="button" class="sb'+(cur===v?' on':'')+'" data-q="'+q.id+'" data-v="'+v+'">'+v+'</button>').join('')+'</div>'+
+      '<div class="sl"><span>Rất không thích</span><span>Rất thích</span></div>';
+    box.appendChild(row);
+  });
+  box.querySelectorAll('.sb').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const q = btn.dataset.q, v = parseInt(btn.dataset.v);
+      state.holland_answers[q] = v;
+      box.querySelectorAll('.sb[data-q="'+q+'"]').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');
+    });
+  });
+  updateBar(Math.round(((changIdx)/6)*40)+5, 'Sở thích nghề · chặng '+(changIdx+1)+'/6');
+  document.getElementById('hint').textContent = 'Chọn mức độ thích của em với từng điều dưới đây — không có đáp án đúng/sai.';
+}
+
+function renderGiaTri(){
+  show('step-giatri');
+  const group = quiz.gia_tri_groups[gtIdx];
+  const box = document.getElementById('step-giatri');
+  box.innerHTML = '<div class="chip">Giá trị nghề · nhóm '+(gtIdx+1)+' / 3</div><div style="font-size:14px;color:var(--muted);margin-bottom:10px">'+group.nhom+'</div><div style="font-size:12px;color:var(--muted);margin-bottom:10px">Xếp hạng: bấm số 1 cho điều quan trọng NHẤT, 2 cho nhì, 3 cho ba — mỗi số chỉ dùng một lần.</div>';
+  group.items.forEach(item=>{
+    const cur = state.gia_tri_rankings[gtIdx][item.key];
+    const row = document.createElement('div'); row.className='vo';
+    row.innerHTML = '<div class="vl">'+item.label+'</div>'+
+      [1,2,3].map(h=>'<button type="button" class="rb'+(cur===h?' on':'')+'" data-key="'+item.key+'" data-h="'+h+'">'+h+'</button>').join('');
+    box.appendChild(row);
+  });
+  box.querySelectorAll('.rb').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const key = btn.dataset.key, h = parseInt(btn.dataset.h);
+      // bỏ hạng này khỏi item khác nếu đã gán
+      Object.keys(state.gia_tri_rankings[gtIdx]).forEach(k=>{
+        if(state.gia_tri_rankings[gtIdx][k]===h) delete state.gia_tri_rankings[gtIdx][k];
+      });
+      state.gia_tri_rankings[gtIdx][key] = h;
+      box.querySelectorAll('.rb').forEach(b=>b.classList.remove('on'));
+      group.items.forEach(it=>{
+        const hh = state.gia_tri_rankings[gtIdx][it.key];
+        if(hh) box.querySelector('.rb[data-key="'+it.key+'"][data-h="'+hh+'"]').classList.add('on');
+      });
+    });
+  });
+  updateBar(45 + Math.round((gtIdx/3)*20), 'Giá trị nghề · nhóm '+(gtIdx+1)+'/3');
+  document.getElementById('hint').textContent = 'Không có đáp án đúng — hãy chọn theo cảm nhận thật của em.';
+}
+
+function addDiemRow(mon, diem){
+  const wrap = document.getElementById('diemRows');
+  const row = document.createElement('div'); row.className='row2';
+  row.innerHTML = '<input type="text" placeholder="Tên môn (vd: Toán)" value="'+(mon||'')+'">'+
+    '<input type="number" step="0.1" min="0" max="10" placeholder="Điểm" value="'+(diem!=null?diem:'')+'">'+
+    '<button type="button" onclick="this.parentElement.remove()">×</button>';
+  wrap.appendChild(row);
+}
+
+function renderDiem(){
+  show('step-diem');
+  const wrap = document.getElementById('diemRows');
+  if(wrap.children.length===0){
+    ['Toán','Ngữ văn','Tiếng Anh'].forEach(m=>addDiemRow(m, ''));
+  }
+  updateBar(85, 'Bảng điểm học tập');
+  document.getElementById('hint').textContent = 'Nhập điểm trung bình các môn (thang 10) — ưu tiên các môn thuộc tổ hợp em định thi.';
+}
+
+function collectDiem(){
+  const rows = document.querySelectorAll('#diemRows .row2');
+  const out = {};
+  rows.forEach(r=>{
+    const inputs = r.querySelectorAll('input');
+    const mon = inputs[0].value.trim();
+    const diem = parseFloat(inputs[1].value);
+    if(mon && !isNaN(diem)) out[mon] = diem;
+  });
+  return out;
+}
+
+function setErr(msg){ document.getElementById('err').textContent = msg||''; }
+
+async function submitAll(){
+  setErr('');
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('btnNext').textContent = 'Đang xử lý...';
+  try{
+    const payload = {
+      ho_ten: state.ho_ten, lop: state.lop, email_gvcn: state.email_gvcn || null,
+      holland_answers: state.holland_answers,
+      gia_tri_rankings: state.gia_tri_rankings,
+      diem_mon: state.diem_mon
+    };
+    const r = await fetch('/api/submit', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    if(!r.ok) throw new Error('Lỗi máy chủ: '+r.status);
+    const data = await r.json();
+    show('step-result');
+    updateBar(100, 'Hoàn tất');
+    document.getElementById('hint').textContent = '';
+    document.getElementById('step-result').innerHTML =
+      '<div class="chip">Mã Holland của em</div>'+
+      '<div class="code">'+data.ma_holland+'</div>'+
+      (data.do_tin_cay ? '' : '<div style="color:#B26B2C;font-size:13px;margin-bottom:10px">Một vài câu trả lời chưa thật nhất quán — kết quả chỉ mang tính tham khảo.</div>')+
+      '<a class="btn primary" style="display:inline-block;text-decoration:none;line-height:46px;padding:0 24px" href="'+data.pdf_url+'" target="_blank">Tải hồ sơ PDF</a>';
+    document.getElementById('navRow').style.display = 'none';
+  }catch(e){
+    setErr('Có lỗi xảy ra, thử lại nhé: '+e.message);
+  }finally{
+    document.getElementById('btnNext').disabled = false;
+    document.getElementById('btnNext').textContent = 'Tiếp tục';
+  }
+}
+
+function next(){
+  setErr('');
+  if(phase==='info'){
+    state.ho_ten = document.getElementById('ho_ten').value.trim();
+    state.lop = document.getElementById('lop').value.trim();
+    state.email_gvcn = document.getElementById('email_gvcn').value.trim();
+    if(!state.ho_ten || !state.lop){ setErr('Vui lòng nhập họ tên và lớp.'); return; }
+    phase = 'holland'; changIdx = 0; renderHolland();
+    document.getElementById('btnBack').style.visibility='visible';
+  } else if(phase==='holland'){
+    const qs = quiz.holland.filter(q=>q.chang===changIdx+1);
+    const missing = qs.some(q=>state.holland_answers[q.id]===undefined);
+    if(missing){ setErr('Vui lòng trả lời hết các câu ở chặng này.'); return; }
+    if(changIdx < 5){ changIdx++; renderHolland(); }
+    else { phase='giatri'; gtIdx=0; renderGiaTri(); }
+  } else if(phase==='giatri'){
+    const group = quiz.gia_tri_groups[gtIdx];
+    const ranks = Object.values(state.gia_tri_rankings[gtIdx]);
+    if(ranks.length < group.items.length){ setErr('Vui lòng xếp hạng đủ cả 3 ý.'); return; }
+    if(gtIdx < 2){ gtIdx++; renderGiaTri(); }
+    else { phase='diem'; renderDiem(); }
+  } else if(phase==='diem'){
+    const diem = collectDiem();
+    if(Object.keys(diem).length===0){ setErr('Vui lòng nhập ít nhất một môn.'); return; }
+    state.diem_mon = diem;
+    submitAll();
+  }
+}
+
+function back(){
+  setErr('');
+  if(phase==='holland'){
+    if(changIdx>0){ changIdx--; renderHolland(); }
+    else { phase='info'; show('step-info'); updateBar(0,'Thông tin học sinh'); document.getElementById('btnBack').style.visibility='hidden'; }
+  } else if(phase==='giatri'){
+    if(gtIdx>0){ gtIdx--; renderGiaTri(); }
+    else { phase='holland'; changIdx=5; renderHolland(); }
+  } else if(phase==='diem'){
+    phase='giatri'; gtIdx=2; renderGiaTri();
+  }
+}
+
+(async function init(){
+  await loadQuiz();
+  show('step-info');
+  document.getElementById('btnBack').style.visibility='hidden';
+})();
+</script>
+</body>
+</html>
