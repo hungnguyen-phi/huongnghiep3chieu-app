@@ -242,6 +242,7 @@ def build_ho_so(ho_ten: str, lop: str, ngay: str,
     luu_y = [
         "Đây là gợi ý định hướng dựa trên dữ liệu test + điểm; quyết định cuối thuộc về em và gia đình.",
         "Tổ hợp xét tuyển mỗi trường mỗi khác và thay đổi theo năm — kiểm chứng lại với đề án tuyển sinh trường đích.",
+        "Các ngành được đánh dấu 'xu hướng 2026' đang có nhu cầu tuyển dụng lớn tại thời điểm hiện tại, nhưng 'ngành hot' không đồng nghĩa là ngành phù hợp nhất với em — vẫn nên ưu tiên sở thích, năng lực và trải nghiệm thực tế trước khi quyết định.",
     ]
     if not h["do_tin_cay"]:
         luu_y.insert(0, "Một số câu trả lời chưa nhất quán (câu kiểm chứng lệch nhiều) — nên trò chuyện thêm với học sinh trước khi dùng kết quả này.")
