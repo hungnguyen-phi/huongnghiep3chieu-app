@@ -18,6 +18,9 @@ services:
       # lại câu mẫu rule-based, không lỗi.
       OPENROUTER_API_KEY: ""
       OPENROUTER_MODEL: "deepseek/deepseek-v4.1-flash"
+      # Model đọc ảnh/PDF bảng điểm (cùng dùng OPENROUTER_API_KEY ở trên).
+      # Mặc định chọn model rẻ nhất còn đáng tin cho việc đọc bảng.
+      OPENROUTER_VISION_MODEL: "google/gemini-2.5-flash-lite"
 
   # Bỏ comment khối dưới nếu muốn chạy kèm Postgres thay vì SQLite.
   # db:

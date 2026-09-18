@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
@@ -12,6 +12,7 @@ from data import HOLLAND_QUESTIONS, GIA_TRI_GROUPS
 from engine import cham_holland, build_ho_so
 from radar_gen import generate_radar
 from pdf_gen import generate_pdf
+from ocr_bang_diem import extract_diem_tu_file
 
 OUTPUT_DIR = os.environ.get('OUTPUT_DIR', './output')
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -86,6 +87,15 @@ def submit(payload: SubmitPayload, db: Session = Depends(get_session)):
         "do_tin_cay": h["do_tin_cay"],
         "pdf_url": f"/api/result/{lt.id}/pdf",
     }
+
+
+# ---------------------------------------------------------------
+# API: đọc bảng điểm từ ảnh/PDF tải lên (chỉ điền sẵn form, không tự nộp)
+# ---------------------------------------------------------------
+@app.post("/api/ocr-bang-diem")
+async def ocr_bang_diem(file: UploadFile = File(...)):
+    content = await file.read()
+    return extract_diem_tu_file(content, file.filename, file.content_type)
 
 
 @app.get("/api/result/{luot_test_id}")

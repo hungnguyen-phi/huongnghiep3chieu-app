@@ -138,6 +138,15 @@ h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,s
 #step-diem .row2 button:active{transform:scale(0.9)}
 .addbtn{margin-top:6px;background:#fff;border:1.5px dashed var(--line);border-radius:12px;height:46px;width:100%;color:var(--muted);cursor:pointer;font-weight:600;transition:border-color .15s, color .15s}
 .addbtn:hover{border-color:var(--mint);color:var(--mint-d)}
+.ocr-box{margin-bottom:16px;padding:14px;border-radius:14px;background:var(--mint-l);border:1.5px dashed var(--mint)}
+.ocr-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border-radius:12px;background:linear-gradient(135deg, var(--mint), var(--mint-d));color:#fff;font-weight:700;cursor:pointer;font-size:14.5px;transition:transform .12s}
+.ocr-btn:active{transform:scale(0.97)}
+.ocr-btn.disabled{background:#cbd5cf;cursor:not-allowed}
+.ocr-note{font-size:12px;color:var(--mint-d);margin-top:8px;text-align:center}
+.ocr-status{font-size:13px;margin-top:8px;text-align:center;font-weight:600;min-height:16px}
+.ocr-status.loading{color:var(--mint-d)}
+.ocr-status.error{color:#c0392b}
+.ocr-status.ok{color:var(--mint-d)}
 </style>
 </head>
 <body>
@@ -164,6 +173,14 @@ h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,s
 
     <div id="step-diem" style="display:none">
       <div class="chip">📊 Bảng điểm các môn</div>
+      <div class="ocr-box">
+        <label class="ocr-btn" id="ocrLabel">
+          📷 Tải ảnh/PDF bảng điểm — AI tự điền giúp
+          <input type="file" id="ocrFile" accept="image/*,.pdf" style="display:none">
+        </label>
+        <div class="ocr-note">Chụp ảnh rõ nét hoặc PDF bảng điểm; AI đọc xong em vẫn xem lại và sửa được trước khi nộp.</div>
+        <div class="ocr-status" id="ocrStatus"></div>
+      </div>
       <div id="diemRows"></div>
       <button class="addbtn" onclick="addDiemRow()">+ Thêm môn</button>
     </div>
@@ -368,6 +385,43 @@ function renderDiem(){
   }
   updateBar(85, 'Bảng điểm học tập');
   document.getElementById('hint').textContent = 'Nhập điểm trung bình các môn (thang 10) — ưu tiên các môn thuộc tổ hợp em định thi.';
+
+  const fileInput = document.getElementById('ocrFile');
+  fileInput.value = '';
+  fileInput.onchange = handleOcrUpload;
+}
+
+async function handleOcrUpload(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('ocrStatus');
+  const labelEl = document.getElementById('ocrLabel');
+  labelEl.classList.add('disabled');
+  statusEl.className = 'ocr-status loading';
+  statusEl.textContent = '⏳ Đang đọc ảnh, mất khoảng 10-20 giây...';
+
+  try{
+    const form = new FormData();
+    form.append('file', file);
+    const r = await fetch('/api/ocr-bang-diem', { method:'POST', body: form });
+    const data = await r.json();
+    if(!data.ok){
+      statusEl.className = 'ocr-status error';
+      statusEl.textContent = '⚠️ ' + (data.loi || 'Không đọc được file này, hãy nhập tay.');
+      return;
+    }
+    const wrap = document.getElementById('diemRows');
+    wrap.innerHTML = '';
+    data.diem.forEach(([mon, diem]) => addDiemRow(mon, diem));
+    syncDiemDraft();
+    statusEl.className = 'ocr-status ok';
+    statusEl.textContent = '✅ Đã điền '+data.diem.length+' môn — kiểm tra lại và sửa nếu AI đọc sai nhé.';
+  }catch(err){
+    statusEl.className = 'ocr-status error';
+    statusEl.textContent = '⚠️ Có lỗi khi tải/đọc file, hãy nhập tay.';
+  }finally{
+    labelEl.classList.remove('disabled');
+  }
 }
 
 function collectDiem(){

@@ -63,6 +63,17 @@ Lưu ý:
   nghĩ" trước khi trả JSON — đã tăng `max_tokens`/giới hạn `reasoning.max_tokens`
   trong `llm_narrative.py` để tránh bị cắt giữa chừng.
 
+### Đọc điểm từ ảnh/PDF (OCR bảng điểm)
+
+Cùng dùng `OPENROUTER_API_KEY` ở trên. Học sinh có thể tải ảnh chụp hoặc PDF
+bảng điểm ở bước "Bảng điểm" thay vì gõ tay — model đọc ảnh
+(`OPENROUTER_VISION_MODEL`, mặc định `google/gemini-2.5-flash-lite`, rất rẻ)
+sẽ trích môn + điểm trung bình rồi điền sẵn vào form. Học sinh LUÔN xem lại
+và sửa được trước khi nộp — không tự động tin tuyệt đối kết quả đọc ảnh vì
+OCR có thể đọc nhầm số. Nếu không đọc được, hiện lỗi rõ ràng và học sinh vẫn
+nhập tay bình thường. Endpoint: `POST /api/ocr-bang-diem` (multipart, field
+`file`, giới hạn 10MB, nhận ảnh JPG/PNG/WEBP hoặc PDF).
+
 ## Chạy không cần Docker (Python trực tiếp)
 
 Cần cài font DejaVu để xuất PDF tiếng Việt có dấu đúng:
@@ -82,6 +93,7 @@ main.py         - FastAPI app: API + phục vụ frontend tĩnh
 data.py         - Ngân hàng 36 câu Holland + 3 nhóm giá trị + bảng ánh xạ ngành nghề
 engine.py       - Chấm điểm + tam giác hóa (rule-based) + gọi llm_narrative.py làm giàu lời văn (tùy chọn)
 llm_narrative.py - Gọi OpenRouter viết lại lời văn nhận xét chi tiết hơn; tự tắt nếu không có OPENROUTER_API_KEY
+ocr_bang_diem.py - Đọc ảnh/PDF bảng điểm qua OpenRouter vision model, trả về [môn, điểm] để điền sẵn form
 radar_gen.py    - Vẽ biểu đồ radar RIASEC (matplotlib)
 pdf_gen.py      - Xuất PDF hồ sơ định hướng (reportlab)
 db.py           - SQLAlchemy models (hoc_sinh, luot_test, diem_holland, gia_tri_nghe, bang_diem, ho_so_dinh_huong)
@@ -94,6 +106,7 @@ static/index.html - Frontend: bài test 6 chặng + xếp hạng giá trị + nh
 - `POST /api/submit` — nộp bài, backend chấm + lưu DB + xuất PDF, trả về `pdf_url`
 - `GET  /api/result/{id}` — xem lại kết quả JSON
 - `GET  /api/result/{id}/pdf` — tải file PDF
+- `POST /api/ocr-bang-diem` — đọc ảnh/PDF bảng điểm (tùy chọn, cần OPENROUTER_API_KEY), trả về `[môn, điểm]` để điền sẵn form
 
 ## Giới hạn hiện tại (điểm nên nâng cấp tiếp)
 
