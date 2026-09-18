@@ -4,53 +4,140 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trắc nghiệm định hướng — Trường Việt Anh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --mint:#1D9E75; --mint-d:#0F6E56; --ink:#1a2e28; --muted:#5f6f68;
-  --line:#dfe8e3; --bg:#f4f8f6; --card:#ffffff; --amber:#B26B2C;
-  --pink:#D4537E; --pink2:#ED93B1; --pink3:#F4C0D1; --pinkink:#72243E;
+  --mint:#1D9E75; --mint-d:#0F6E56; --mint-l:#eafaf3;
+  --ink:#16241f; --muted:#647169;
+  --line:#e3ece7; --bg1:#f0faf5; --bg2:#eaf3fb; --card:#ffffff;
+  --amber:#d98a2b; --gold:#f0b429; --silver:#9ca8b4; --bronze:#c98a4f;
+  --pink:#e0568a; --pink-d:#a83a63;
+  --shadow: 0 10px 30px -12px rgba(15,110,86,0.25);
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
-.wrap{max-width:680px;margin:0 auto;padding:20px 16px 60px}
-.brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.brand .dot{width:34px;height:34px;border-radius:9px;background:var(--mint);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px}
-.brand .t{font-size:14px;color:var(--muted)}
-.brand .t b{color:var(--ink);display:block;font-size:15px}
-.bar{height:8px;background:#e3ece8;border-radius:20px;overflow:hidden;margin:8px 0}
-.bar>i{display:block;height:100%;width:0;background:var(--mint);border-radius:20px;transition:width .35s ease}
+body{
+  margin:0;font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);line-height:1.55;
+  background:
+    radial-gradient(circle at 10% -10%, rgba(29,158,117,0.14), transparent 40%),
+    radial-gradient(circle at 100% 0%, rgba(224,86,138,0.10), transparent 45%),
+    linear-gradient(160deg, var(--bg1), var(--bg2));
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,sans-serif}
+.wrap{max-width:680px;margin:0 auto;padding:24px 16px 70px}
+
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.brand .dot{
+  width:42px;height:42px;border-radius:13px;
+  background:linear-gradient(135deg, var(--mint), var(--mint-d));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px;
+  box-shadow:0 8px 18px -6px rgba(15,110,86,0.55);
+}
+.brand .t{font-size:13.5px;color:var(--muted)}
+.brand .t b{color:var(--ink);display:block;font-size:18px;font-weight:700}
+
+.bar{height:10px;background:#dfe9e3;border-radius:20px;overflow:hidden;margin:10px 0;position:relative}
+.bar>i{
+  display:block;height:100%;width:100%;border-radius:20px;
+  background:linear-gradient(90deg, var(--mint), #34c98e);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+  position:relative;
+}
+.bar>i::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+  animation:shine 1.8s ease-in-out infinite;
+}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .lab{display:flex;justify-content:space-between;align-items:baseline}
-.lab .l{font-size:16px;font-weight:600}
-.lab .p{font-size:12px;color:var(--muted)}
-.hint{font-size:13px;color:var(--muted);min-height:18px;margin-bottom:10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
-.fld{margin-bottom:14px}
-.fld label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-.fld input{width:100%;height:42px;font-size:15px;border:1px solid var(--line);border-radius:9px;padding:0 12px}
-.row{padding:12px 0;border-bottom:1px solid var(--line)}
-.qt{font-size:14.5px;margin-bottom:9px}
+.lab .l{font-size:16.5px;font-weight:700;font-family:'Baloo 2',sans-serif}
+.lab .p{font-size:12.5px;color:var(--muted);font-weight:600}
+.hint{font-size:13.5px;color:var(--muted);min-height:18px;margin-bottom:12px}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;
+  box-shadow:var(--shadow);
+  animation:fadeSlide .35s ease both;
+}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.fld{margin-bottom:16px}
+.fld label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;font-weight:600}
+.fld input{
+  width:100%;height:46px;font-size:15.5px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;
+  font-family:inherit;transition:border-color .15s, box-shadow .15s;
+}
+.fld input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(29,158,117,0.12)}
+
+.row{padding:16px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.qt{font-size:15.5px;margin-bottom:12px;font-weight:600;line-height:1.4}
 .sc{display:flex;gap:6px}
-.sb{flex:1;height:42px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:15px;cursor:pointer;color:var(--muted);transition:.12s}
-.sb.on{background:var(--mint);border-color:var(--mint-d);color:#fff;font-weight:600}
-.sl{display:flex;justify-content:space-between;font-size:10.5px;color:#9aa8a2;margin-top:4px}
-.vo{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:9px;margin-bottom:8px}
-.vl{flex:1;font-size:13.5px}
-.rb{width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:#fff;font-size:13px;cursor:pointer;color:var(--muted)}
-.rb.on{background:var(--pink);border-color:var(--pinkink);color:#fff;font-weight:700}
-.btnrow{display:flex;gap:10px;margin-top:18px}
-.btn{flex:1;height:46px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer}
-.btn.primary{background:var(--mint);color:#fff}
-.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--muted)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.chip{display:inline-block;background:#eaf5f0;color:var(--mint-d);font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;margin-bottom:8px}
-.result{text-align:center;padding:30px 20px}
-.result .code{font-size:32px;font-weight:800;color:var(--mint-d);margin:10px 0}
-.err{color:#c0392b;font-size:13px;margin-top:8px}
-#step-diem .row2{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-#step-diem .row2 input[type=text]{flex:1;height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px}
-#step-diem .row2 input[type=number]{width:80px;height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px}
-#step-diem .row2 button{border:none;background:#fdeceb;color:#c0392b;border-radius:8px;height:38px;width:38px;cursor:pointer}
-.addbtn{margin-top:6px;background:#fff;border:1px dashed var(--line);border-radius:9px;height:40px;width:100%;color:var(--muted);cursor:pointer}
+.sb{
+  flex:1;height:56px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
+  font-size:20px;cursor:pointer;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  transition:transform .12s, border-color .15s, background .15s, box-shadow .15s;
+}
+.sb .n{font-size:10px;font-weight:700;opacity:.55}
+.sb:active{transform:scale(0.93)}
+.sb.on{
+  background:linear-gradient(160deg, var(--mint), var(--mint-d));border-color:var(--mint-d);color:#fff;
+  box-shadow:0 8px 16px -6px rgba(15,110,86,0.5);transform:scale(1.04);
+}
+.sb.on .n{opacity:.85}
+.sl{display:flex;justify-content:space-between;font-size:10.5px;color:#9aa8a2;margin-top:6px;font-weight:600}
+
+.vo{
+  display:flex;align-items:center;gap:14px;padding:16px;border:2px solid var(--line);border-radius:16px;
+  margin-bottom:10px;cursor:pointer;background:#fff;
+  transition:transform .12s, border-color .15s, background .15s, box-shadow .2s;
+  user-select:none;
+}
+.vo:active{transform:scale(0.98)}
+.vo .badge{
+  width:34px;height:34px;border-radius:50%;border:2px dashed #c7d3cc;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#b6c2bb;
+  flex-shrink:0;transition:all .2s cubic-bezier(.22,1,.36,1);
+}
+.vl{flex:1;font-size:14.5px;font-weight:600;line-height:1.4}
+.vo.r1{border-color:var(--gold);background:linear-gradient(90deg, #fff9ec, #fff)}
+.vo.r1 .badge{background:var(--gold);border-style:solid;border-color:var(--gold);color:#fff;transform:scale(1.1)}
+.vo.r2{border-color:var(--silver);background:linear-gradient(90deg, #f5f7f9, #fff)}
+.vo.r2 .badge{background:var(--silver);border-style:solid;border-color:var(--silver);color:#fff;transform:scale(1.05)}
+.vo.r3{border-color:var(--bronze);background:linear-gradient(90deg, #fbf1e8, #fff)}
+.vo.r3 .badge{background:var(--bronze);border-style:solid;border-color:var(--bronze);color:#fff}
+
+.btnrow{display:flex;gap:10px;margin-top:22px}
+.btn{
+  flex:1;height:52px;border:none;border-radius:14px;font-size:15.5px;font-weight:700;cursor:pointer;
+  font-family:'Baloo 2',sans-serif;transition:transform .12s, box-shadow .15s;
+}
+.btn:active{transform:scale(0.97)}
+.btn.primary{background:linear-gradient(135deg, var(--mint), var(--mint-d));color:#fff;box-shadow:0 10px 22px -8px rgba(15,110,86,0.6)}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.chip{
+  display:inline-block;background:var(--mint-l);color:var(--mint-d);font-size:12.5px;font-weight:700;
+  padding:6px 14px;border-radius:20px;margin-bottom:10px;
+}
+.result{text-align:center;padding:36px 20px}
+.result .emoji{font-size:48px;margin-bottom:6px;animation:pop .4s cubic-bezier(.22,1,.36,1) both}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.result .code{font-size:34px;font-weight:800;margin:12px 0;color:var(--mint-d)}
+.err{color:#c0392b;font-size:13px;margin-top:10px;font-weight:600}
+
+#step-diem .row2{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+#step-diem .row2 input[type=text]{flex:1;height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;font-family:inherit}
+#step-diem .row2 input[type=number]{width:84px;height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font-family:inherit}
+#step-diem .row2 button{border:none;background:#fdeceb;color:#c0392b;border-radius:10px;height:44px;width:44px;cursor:pointer;font-size:18px;transition:transform .12s}
+#step-diem .row2 button:active{transform:scale(0.9)}
+.addbtn{margin-top:6px;background:#fff;border:1.5px dashed var(--line);border-radius:12px;height:46px;width:100%;color:var(--muted);cursor:pointer;font-weight:600;transition:border-color .15s, color .15s}
+.addbtn:hover{border-color:var(--mint);color:var(--mint-d)}
 </style>
 </head>
 <body>
@@ -64,7 +151,7 @@ body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;backgrou
   <div class="bar"><i id="bar"></i></div>
   <div class="hint" id="hint">Vài thông tin nhỏ trước khi bắt đầu nhé.</div>
 
-  <div class="card">
+  <div class="card" id="mainCard">
 
     <div id="step-info">
       <div class="fld"><label>Họ và tên học sinh</label><input id="ho_ten" placeholder="Nguyễn Văn A"></div>
@@ -76,7 +163,7 @@ body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;backgrou
     <div id="step-giatri" style="display:none"></div>
 
     <div id="step-diem" style="display:none">
-      <div class="chip">Bảng điểm các môn</div>
+      <div class="chip">📊 Bảng điểm các môn</div>
       <div id="diemRows"></div>
       <button class="addbtn" onclick="addDiemRow()">+ Thêm môn</button>
     </div>
@@ -101,6 +188,7 @@ const CHANG_TITLES = [
   "Chặng cuối rồi! Em còn thấy mình..."
 ];
 const SCALE_LABELS = ["Rất không thích","Không thích","Bình thường","Thích","Rất thích"];
+const SCALE_EMOJI = ["😖","😕","😐","🙂","😍"];
 
 let quiz = null;
 let state = {
@@ -126,22 +214,30 @@ function updateBar(pct, title){
   document.getElementById('stepTitle').textContent = title;
 }
 
+function playCardTransition(){
+  const card = document.getElementById('mainCard');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'fadeSlide .35s ease both';
+}
+
 function show(id){
   ['step-info','step-holland','step-giatri','step-diem','step-result'].forEach(x=>{
     document.getElementById(x).style.display = (x===id)?'block':'none';
   });
+  playCardTransition();
 }
 
 function renderHolland(){
   show('step-holland');
   const qs = quiz.holland.filter(q=>q.chang === changIdx+1);
   const box = document.getElementById('step-holland');
-  box.innerHTML = '<div class="chip">Chặng '+(changIdx+1)+' / 6</div><div style="font-size:14px;color:var(--muted);margin-bottom:10px">'+CHANG_TITLES[changIdx]+'</div>';
+  box.innerHTML = '<div class="chip">🎯 Chặng '+(changIdx+1)+' / 6</div><div style="font-size:15px;color:var(--muted);margin-bottom:6px;font-weight:600">'+CHANG_TITLES[changIdx]+'</div>';
   qs.forEach(q=>{
     const row = document.createElement('div'); row.className='row';
     const cur = state.holland_answers[q.id];
     row.innerHTML = '<div class="qt">'+q.text+'</div>'+
-      '<div class="sc">'+[0,1,2,3,4].map(v=>'<button type="button" class="sb'+(cur===v?' on':'')+'" data-q="'+q.id+'" data-v="'+v+'">'+v+'</button>').join('')+'</div>'+
+      '<div class="sc">'+[0,1,2,3,4].map(v=>'<button type="button" class="sb'+(cur===v?' on':'')+'" data-q="'+q.id+'" data-v="'+v+'"><span>'+SCALE_EMOJI[v]+'</span><span class="n">'+v+'</span></button>').join('')+'</div>'+
       '<div class="sl"><span>Rất không thích</span><span>Rất thích</span></div>';
     box.appendChild(row);
   });
@@ -161,29 +257,50 @@ function renderGiaTri(){
   show('step-giatri');
   const group = quiz.gia_tri_groups[gtIdx];
   const box = document.getElementById('step-giatri');
-  box.innerHTML = '<div class="chip">Giá trị nghề · nhóm '+(gtIdx+1)+' / 3</div><div style="font-size:14px;color:var(--muted);margin-bottom:10px">'+group.nhom+'</div><div style="font-size:12px;color:var(--muted);margin-bottom:10px">Xếp hạng: bấm số 1 cho điều quan trọng NHẤT, 2 cho nhì, 3 cho ba — mỗi số chỉ dùng một lần.</div>';
+  box.innerHTML = '<div class="chip">💎 Giá trị nghề · nhóm '+(gtIdx+1)+' / 3</div>'+
+    '<div style="font-size:15px;color:var(--muted);margin-bottom:8px;font-weight:600">'+group.nhom+'</div>'+
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">👆 Bấm vào ý <b>quan trọng nhất với em</b> trước, rồi đến ý nhì, rồi ý ba. Bấm lại một ý để bỏ chọn.</div>';
   group.items.forEach(item=>{
-    const cur = state.gia_tri_rankings[gtIdx][item.key];
-    const row = document.createElement('div'); row.className='vo';
-    row.innerHTML = '<div class="vl">'+item.label+'</div>'+
-      [1,2,3].map(h=>'<button type="button" class="rb'+(cur===h?' on':'')+'" data-key="'+item.key+'" data-h="'+h+'">'+h+'</button>').join('');
+    const row = document.createElement('div'); row.className='vo'; row.dataset.key = item.key;
+    row.innerHTML = '<div class="badge">?</div><div class="vl">'+item.label+'</div>';
     box.appendChild(row);
   });
-  box.querySelectorAll('.rb').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const key = btn.dataset.key, h = parseInt(btn.dataset.h);
-      // bỏ hạng này khỏi item khác nếu đã gán
-      Object.keys(state.gia_tri_rankings[gtIdx]).forEach(k=>{
-        if(state.gia_tri_rankings[gtIdx][k]===h) delete state.gia_tri_rankings[gtIdx][k];
-      });
-      state.gia_tri_rankings[gtIdx][key] = h;
-      box.querySelectorAll('.rb').forEach(b=>b.classList.remove('on'));
-      group.items.forEach(it=>{
-        const hh = state.gia_tri_rankings[gtIdx][it.key];
-        if(hh) box.querySelector('.rb[data-key="'+it.key+'"][data-h="'+hh+'"]').classList.add('on');
-      });
+
+  function paint(){
+    group.items.forEach(item=>{
+      const el = box.querySelector('.vo[data-key="'+item.key+'"]');
+      const rank = state.gia_tri_rankings[gtIdx][item.key];
+      el.classList.remove('r1','r2','r3');
+      const badge = el.querySelector('.badge');
+      if(rank){
+        el.classList.add('r'+rank);
+        badge.textContent = rank;
+      } else {
+        badge.textContent = '?';
+      }
+    });
+  }
+  paint();
+
+  box.querySelectorAll('.vo').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const key = el.dataset.key;
+      const ranks = state.gia_tri_rankings[gtIdx];
+      if(ranks[key]){
+        // bỏ chọn ý này, dồn lại thứ hạng các ý xếp sau nó
+        const removed = ranks[key];
+        delete ranks[key];
+        Object.keys(ranks).forEach(k=>{ if(ranks[k] > removed) ranks[k]--; });
+      } else {
+        const usedCount = Object.keys(ranks).length;
+        if(usedCount >= group.items.length) return; // đã đủ hạng
+        ranks[key] = usedCount + 1;
+      }
+      paint();
+      setErr('');
     });
   });
+
   updateBar(45 + Math.round((gtIdx/3)*20), 'Giá trị nghề · nhóm '+(gtIdx+1)+'/3');
   document.getElementById('hint').textContent = 'Không có đáp án đúng — hãy chọn theo cảm nhận thật của em.';
 }
@@ -241,10 +358,11 @@ async function submitAll(){
     updateBar(100, 'Hoàn tất');
     document.getElementById('hint').textContent = '';
     document.getElementById('step-result').innerHTML =
+      '<div class="emoji">🎉</div>'+
       '<div class="chip">Mã Holland của em</div>'+
       '<div class="code">'+data.ma_holland+'</div>'+
-      (data.do_tin_cay ? '' : '<div style="color:#B26B2C;font-size:13px;margin-bottom:10px">Một vài câu trả lời chưa thật nhất quán — kết quả chỉ mang tính tham khảo.</div>')+
-      '<a class="btn primary" style="display:inline-block;text-decoration:none;line-height:46px;padding:0 24px" href="'+data.pdf_url+'" target="_blank">Tải hồ sơ PDF</a>';
+      (data.do_tin_cay ? '' : '<div style="color:var(--amber);font-size:13px;margin-bottom:10px;font-weight:600">Một vài câu trả lời chưa thật nhất quán — kết quả chỉ mang tính tham khảo.</div>')+
+      '<a class="btn primary" style="display:inline-block;text-decoration:none;line-height:52px;padding:0 28px" href="'+data.pdf_url+'" target="_blank">📄 Tải hồ sơ PDF</a>';
     document.getElementById('navRow').style.display = 'none';
   }catch(e){
     setErr('Có lỗi xảy ra, thử lại nhé: '+e.message);
