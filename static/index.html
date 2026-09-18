@@ -169,6 +169,7 @@ h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,s
     </div>
 
     <div id="step-result" style="display:none" class="result"></div>
+    <div id="step-resume" style="display:none"></div>
 
     <div class="btnrow" id="navRow">
       <button class="btn ghost" id="btnBack" onclick="back()">Quay lại</button>
@@ -190,18 +191,48 @@ const CHANG_TITLES = [
 const SCALE_LABELS = ["Rất không thích","Không thích","Bình thường","Thích","Rất thích"];
 const SCALE_EMOJI = ["😖","😕","😐","🙂","😍"];
 
+const SAVE_KEY = 'huongnghiep3chieu_progress_v1';
+
 let quiz = null;
 let state = {
   ho_ten:"", lop:"", email_gvcn:"",
   holland_answers: {},
   gia_tri_rankings: {0:{}, 1:{}, 2:{}},
-  diem_mon: {}
+  diem_mon: {},
+  diem_draft: []
 };
 
 // steps: info -> holland(6 chặng) -> giatri(3 nhóm) -> diem -> result
 let phase = "info";
 let changIdx = 0;   // 0..5
 let gtIdx = 0;      // 0..2
+
+function saveProgress(){
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ state, phase, changIdx, gtIdx }));
+  }catch(e){ /* localStorage không khả dụng — bỏ qua, không chặn bài làm */ }
+}
+
+function clearProgress(){
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+}
+
+function loadSavedProgress(){
+  try{
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return null;
+    const data = JSON.parse(raw);
+    if(!data || !data.state) return null;
+    return data;
+  }catch(e){ return null; }
+}
+
+function hasAnyProgress(saved){
+  if(!saved) return false;
+  const s = saved.state;
+  return !!(s.ho_ten || s.lop || Object.keys(s.holland_answers||{}).length ||
+    Object.values(s.gia_tri_rankings||{}).some(g=>Object.keys(g||{}).length));
+}
 
 async function loadQuiz(){
   const r = await fetch('/api/quiz');
@@ -222,7 +253,7 @@ function playCardTransition(){
 }
 
 function show(id){
-  ['step-info','step-holland','step-giatri','step-diem','step-result'].forEach(x=>{
+  ['step-info','step-holland','step-giatri','step-diem','step-result','step-resume'].forEach(x=>{
     document.getElementById(x).style.display = (x===id)?'block':'none';
   });
   playCardTransition();
@@ -247,6 +278,7 @@ function renderHolland(){
       state.holland_answers[q] = v;
       box.querySelectorAll('.sb[data-q="'+q+'"]').forEach(b=>b.classList.remove('on'));
       btn.classList.add('on');
+      saveProgress();
     });
   });
   updateBar(Math.round(((changIdx)/6)*40)+5, 'Sở thích nghề · chặng '+(changIdx+1)+'/6');
@@ -298,6 +330,7 @@ function renderGiaTri(){
       }
       paint();
       setErr('');
+      saveProgress();
     });
   });
 
@@ -305,19 +338,32 @@ function renderGiaTri(){
   document.getElementById('hint').textContent = 'Không có đáp án đúng — hãy chọn theo cảm nhận thật của em.';
 }
 
+function syncDiemDraft(){
+  const rows = document.querySelectorAll('#diemRows .row2');
+  state.diem_draft = Array.from(rows).map(r=>{
+    const inputs = r.querySelectorAll('input');
+    return { mon: inputs[0].value, diem: inputs[1].value };
+  });
+  saveProgress();
+}
+
 function addDiemRow(mon, diem){
   const wrap = document.getElementById('diemRows');
   const row = document.createElement('div'); row.className='row2';
   row.innerHTML = '<input type="text" placeholder="Tên môn (vd: Toán)" value="'+(mon||'')+'">'+
     '<input type="number" step="0.1" min="0" max="10" placeholder="Điểm" value="'+(diem!=null?diem:'')+'">'+
-    '<button type="button" onclick="this.parentElement.remove()">×</button>';
+    '<button type="button" onclick="this.parentElement.remove(); syncDiemDraft()">×</button>';
+  row.querySelectorAll('input').forEach(inp=>inp.addEventListener('input', syncDiemDraft));
   wrap.appendChild(row);
 }
 
 function renderDiem(){
   show('step-diem');
   const wrap = document.getElementById('diemRows');
-  if(wrap.children.length===0){
+  wrap.innerHTML = '';
+  if(state.diem_draft && state.diem_draft.length){
+    state.diem_draft.forEach(r=>addDiemRow(r.mon, r.diem));
+  } else {
     ['Toán','Ngữ văn','Tiếng Anh'].forEach(m=>addDiemRow(m, ''));
   }
   updateBar(85, 'Bảng điểm học tập');
@@ -364,6 +410,7 @@ async function submitAll(){
       (data.do_tin_cay ? '' : '<div style="color:var(--amber);font-size:13px;margin-bottom:10px;font-weight:600">Một vài câu trả lời chưa thật nhất quán — kết quả chỉ mang tính tham khảo.</div>')+
       '<a class="btn primary" style="display:inline-block;text-decoration:none;line-height:52px;padding:0 28px" href="'+data.pdf_url+'" target="_blank">📄 Tải hồ sơ PDF</a>';
     document.getElementById('navRow').style.display = 'none';
+    clearProgress();
   }catch(e){
     setErr('Có lỗi xảy ra, thử lại nhé: '+e.message);
   }finally{
@@ -381,18 +428,21 @@ function next(){
     if(!state.ho_ten || !state.lop){ setErr('Vui lòng nhập họ tên và lớp.'); return; }
     phase = 'holland'; changIdx = 0; renderHolland();
     document.getElementById('btnBack').style.visibility='visible';
+    saveProgress();
   } else if(phase==='holland'){
     const qs = quiz.holland.filter(q=>q.chang===changIdx+1);
     const missing = qs.some(q=>state.holland_answers[q.id]===undefined);
     if(missing){ setErr('Vui lòng trả lời hết các câu ở chặng này.'); return; }
     if(changIdx < 5){ changIdx++; renderHolland(); }
     else { phase='giatri'; gtIdx=0; renderGiaTri(); }
+    saveProgress();
   } else if(phase==='giatri'){
     const group = quiz.gia_tri_groups[gtIdx];
     const ranks = Object.values(state.gia_tri_rankings[gtIdx]);
     if(ranks.length < group.items.length){ setErr('Vui lòng xếp hạng đủ cả 3 ý.'); return; }
     if(gtIdx < 2){ gtIdx++; renderGiaTri(); }
     else { phase='diem'; renderDiem(); }
+    saveProgress();
   } else if(phase==='diem'){
     const diem = collectDiem();
     if(Object.keys(diem).length===0){ setErr('Vui lòng nhập ít nhất một môn.'); return; }
@@ -414,10 +464,57 @@ function back(){
   }
 }
 
+function restoreFrom(saved){
+  state = saved.state;
+  if(!state.diem_draft) state.diem_draft = [];
+  phase = saved.phase;
+  changIdx = saved.changIdx || 0;
+  gtIdx = saved.gtIdx || 0;
+  document.getElementById('ho_ten').value = state.ho_ten || '';
+  document.getElementById('lop').value = state.lop || '';
+  document.getElementById('email_gvcn').value = state.email_gvcn || '';
+  document.getElementById('btnBack').style.visibility = (phase==='info') ? 'hidden' : 'visible';
+  if(phase==='holland') renderHolland();
+  else if(phase==='giatri') renderGiaTri();
+  else if(phase==='diem') renderDiem();
+  else show('step-info');
+}
+
+function showResumeChoice(saved){
+  show('step-resume');
+  document.getElementById('navRow').style.display = 'none';
+  document.getElementById('step-resume').innerHTML =
+    '<div style="text-align:center;padding:12px 4px">'+
+      '<div class="emoji" style="font-size:40px;margin-bottom:10px">👋</div>'+
+      '<div style="font-size:17px;font-weight:700;font-family:\'Baloo 2\',sans-serif;margin-bottom:8px">Em đang làm dở bài trước đó'+(saved.state.ho_ten ? ' — '+saved.state.ho_ten : '')+'</div>'+
+      '<div style="font-size:13.5px;color:var(--muted);margin-bottom:20px">Muốn làm tiếp từ chỗ đã dừng hay bắt đầu lại từ đầu?</div>'+
+      '<div class="btnrow" style="margin-top:0">'+
+        '<button type="button" class="btn ghost" id="btnRestart">Làm lại từ đầu</button>'+
+        '<button type="button" class="btn primary" id="btnResume">Làm tiếp</button>'+
+      '</div>'+
+    '</div>';
+  document.getElementById('btnResume').addEventListener('click', ()=>{
+    document.getElementById('navRow').style.display = 'flex';
+    restoreFrom(saved);
+  });
+  document.getElementById('btnRestart').addEventListener('click', ()=>{
+    clearProgress();
+    document.getElementById('navRow').style.display = 'flex';
+    show('step-info');
+    document.getElementById('btnBack').style.visibility = 'hidden';
+  });
+}
+
 (async function init(){
   await loadQuiz();
-  show('step-info');
-  document.getElementById('btnBack').style.visibility='hidden';
+  const saved = loadSavedProgress();
+  if(hasAnyProgress(saved) && saved.phase !== 'result'){
+    showResumeChoice(saved);
+  } else {
+    clearProgress();
+    show('step-info');
+    document.getElementById('btnBack').style.visibility='hidden';
+  }
 })();
 </script>
 </body>
