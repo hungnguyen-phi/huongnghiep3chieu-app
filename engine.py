@@ -7,6 +7,7 @@ trên server tự host.
 from data import (
     HOLLAND_LABEL, TO_HOP, KHOI_NGANH, GIA_TRI_MOI_TRUONG, BAY_PAIRS,
 )
+from llm_narrative import generate_narrative
 
 
 def cham_holland(answers: dict) -> dict:
@@ -247,7 +248,7 @@ def build_ho_so(ho_ten: str, lop: str, ngay: str,
     if not h["do_tin_cay"]:
         luu_y.insert(0, "Một số câu trả lời chưa nhất quán (câu kiểm chứng lệch nhiều) — nên trò chuyện thêm với học sinh trước khi dùng kết quả này.")
 
-    return {
+    ho_so = {
         "ho_ten": ho_ten,
         "lop": lop,
         "ngay": ngay,
@@ -267,3 +268,52 @@ def build_ho_so(ho_ten: str, lop: str, ngay: str,
         "_scores": h["scores"],
         "_do_tin_cay": h["do_tin_cay"],
     }
+    _lam_giau_bang_llm(ho_so, h, gia_tri_troi, to_hop_uu_tien, diem_mon)
+    return ho_so
+
+
+def _lam_giau_bang_llm(ho_so: dict, h: dict, gia_tri_troi: list,
+                        to_hop_uu_tien: list, diem_mon: dict) -> None:
+    """Gọi LLM (OpenRouter) để viết lại các đoạn diễn giải cho cụ thể/chi tiết
+    hơn bản mẫu câu rule-based. Sửa `ho_so` tại chỗ, chỉ ghi đè field nào LLM
+    trả về hợp lệ — mọi lỗi/timeout đều im lặng giữ nguyên bản rule-based."""
+    ranked = sorted(h["scores"].items(), key=lambda x: -x[1])
+    top3_labeled = [f"{k} ({HOLLAND_LABEL[k]}) = {v}/24" for k, v in ranked[:3]]
+    low_labeled = [f"{k} ({HOLLAND_LABEL[k]}) = {v}/24" for k, v in ranked[3:]]
+
+    ctx = {
+        "ho_ten": ho_so["ho_ten"], "lop": ho_so["lop"],
+        "scores": h["scores"], "top3_labeled": top3_labeled, "low_labeled": low_labeled,
+        "gia_tri_troi": gia_tri_troi, "diem_mon": diem_mon,
+        "to_hop_uu_tien": to_hop_uu_tien, "nganh_nghe_nen": ho_so["nganh_nghe"],
+    }
+    try:
+        llm = generate_narrative(ctx)
+    except Exception:
+        llm = None
+    if not llm:
+        return
+
+    ho_so["holland_detail"] = llm.get("holland_detail_html") or ho_so["holland_detail"]
+    ho_so["nhan_xet_nl"] = llm.get("nhan_xet_nl") or ho_so["nhan_xet_nl"]
+    ho_so["nhan_xet_th"] = llm.get("nhan_xet_th") or ho_so["nhan_xet_th"]
+    ho_so["nhan_xet_nn"] = llm.get("nhan_xet_nn") or ho_so["nhan_xet_nn"]
+
+    to_hop_mo_ta = llm.get("to_hop_mo_ta") or {}
+    if isinstance(to_hop_mo_ta, dict) and to_hop_mo_ta:
+        for row in ho_so["to_hop"]:
+            ma = row[0]
+            if ma in to_hop_mo_ta and to_hop_mo_ta[ma]:
+                row[4] = to_hop_mo_ta[ma]
+
+    nganh_nghe_llm = llm.get("nganh_nghe")
+    if isinstance(nganh_nghe_llm, list) and nganh_nghe_llm:
+        cleaned = [row for row in nganh_nghe_llm if isinstance(row, list) and len(row) == 4]
+        if cleaned:
+            ho_so["nganh_nghe"] = cleaned[:6]
+
+    phan_tich_llm = llm.get("phan_tich_chi_tiet")
+    if isinstance(phan_tich_llm, list) and phan_tich_llm:
+        cleaned = [row for row in phan_tich_llm if isinstance(row, list) and len(row) == 2]
+        if len(cleaned) == 3:
+            ho_so["phan_tich_chi_tiet"] = cleaned
