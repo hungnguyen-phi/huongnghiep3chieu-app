@@ -6,43 +6,51 @@
 <title>Trắc nghiệm định hướng — Trường Việt Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --mint:#1D9E75; --mint-d:#0F6E56; --mint-l:#eafaf3;
-  --ink:#16241f; --muted:#647169;
-  --line:#e3ece7; --bg1:#f0faf5; --bg2:#eaf3fb; --card:#ffffff;
-  --amber:#d98a2b; --gold:#f0b429; --silver:#9ca8b4; --bronze:#c98a4f;
-  --pink:#e0568a; --pink-d:#a83a63;
-  --shadow: 0 10px 30px -12px rgba(15,110,86,0.25);
+  --clay:#0D9488; --clay-d:#0B7B71; --clay-l:#E4FBF6;
+  --ink:#123B37; --muted:#5B6F6C;
+  --line:#BFE9E1; --bg1:#F4FBF8; --bg2:#EAF6F1; --card:#FFFFFF;
+  --amber:#D97706; --amber-d:#B45F04; --amber-l:#FFF3E0;
+  --gold:#F0B429; --silver:#9CA8B4; --bronze:#C98A4F;
+  --coral:#E0568A; --coral-d:#A83A63;
+  --danger:#C0392B; --danger-l:#FDECEB;
+  --border-w:3px;
+  --radius:22px;
+  --shadow-outer: 6px 8px 0 0 rgba(18,59,55,0.10);
+  --shadow-outer-sm: 4px 5px 0 0 rgba(18,59,55,0.10);
+  --shadow-inset: inset 0 -3px 0 0 rgba(18,59,55,0.06);
 }
 *{box-sizing:border-box}
 body{
-  margin:0;font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--ink);line-height:1.55;
+  margin:0;font-family:'Nunito',system-ui,-apple-system,sans-serif;color:var(--ink);line-height:1.55;
   background:
-    radial-gradient(circle at 10% -10%, rgba(29,158,117,0.14), transparent 40%),
-    radial-gradient(circle at 100% 0%, rgba(224,86,138,0.10), transparent 45%),
+    radial-gradient(circle at 8% -10%, rgba(13,148,136,0.16), transparent 42%),
+    radial-gradient(circle at 100% 4%, rgba(217,119,6,0.10), transparent 45%),
     linear-gradient(160deg, var(--bg1), var(--bg2));
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,sans-serif}
+h1,h2,.brand,.chip,.code,.qt,.vl{font-family:'Fredoka',system-ui,sans-serif}
 .wrap{max-width:680px;margin:0 auto;padding:24px 16px 70px}
+svg.ic{display:inline-block;vertical-align:-3px;flex-shrink:0}
 
 .brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
 .brand .dot{
-  width:42px;height:42px;border-radius:13px;
-  background:linear-gradient(135deg, var(--mint), var(--mint-d));
-  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px;
-  box-shadow:0 8px 18px -6px rgba(15,110,86,0.55);
+  width:44px;height:44px;border-radius:16px;
+  background:linear-gradient(145deg, var(--clay), var(--clay-d));
+  border:var(--border-w) solid var(--clay-d);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:16px;
+  box-shadow:var(--shadow-outer-sm);
 }
 .brand .t{font-size:13.5px;color:var(--muted)}
-.brand .t b{color:var(--ink);display:block;font-size:18px;font-weight:700}
+.brand .t b{color:var(--ink);display:block;font-size:19px;font-weight:600}
 
-.bar{height:10px;background:#dfe9e3;border-radius:20px;overflow:hidden;margin:10px 0;position:relative}
+.bar{height:12px;background:#DCEEE8;border-radius:20px;overflow:hidden;margin:10px 0;position:relative;border:2px solid var(--line)}
 .bar>i{
   display:block;height:100%;width:100%;border-radius:20px;
-  background:linear-gradient(90deg, var(--mint), #34c98e);
+  background:linear-gradient(90deg, var(--clay), #2BC4AE);
   transform:scaleX(0);transform-origin:left;
   transition:transform .45s cubic-bezier(.22,1,.36,1);
   position:relative;
@@ -54,99 +62,107 @@ h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,s
 }
 @keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .lab{display:flex;justify-content:space-between;align-items:baseline}
-.lab .l{font-size:16.5px;font-weight:700;font-family:'Baloo 2',sans-serif}
-.lab .p{font-size:12.5px;color:var(--muted);font-weight:600}
-.hint{font-size:13.5px;color:var(--muted);min-height:18px;margin-bottom:12px}
+.lab .l{font-size:16.5px;font-weight:600;font-family:'Fredoka',sans-serif}
+.lab .p{font-size:12.5px;color:var(--muted);font-weight:700}
+.hint{font-size:13.5px;color:var(--muted);min-height:18px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
 .card{
-  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;
-  box-shadow:var(--shadow);
+  background:var(--card);border:var(--border-w) solid var(--line);border-radius:var(--radius);padding:24px;
+  box-shadow:var(--shadow-outer);
   animation:fadeSlide .35s ease both;
 }
 @keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 .fld{margin-bottom:16px}
-.fld label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;font-weight:600}
+.fld label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;font-weight:700}
 .fld input{
-  width:100%;height:46px;font-size:15.5px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;
-  font-family:inherit;transition:border-color .15s, box-shadow .15s;
+  width:100%;height:48px;font-size:15.5px;border:2px solid var(--line);border-radius:14px;padding:0 14px;
+  font-family:inherit;transition:border-color .15s, box-shadow .15s;background:#fff;color:var(--ink);
 }
-.fld input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 4px rgba(29,158,117,0.12)}
+.fld input:focus-visible, input:focus-visible, button:focus-visible, .vo:focus-visible, .sb:focus-visible{
+  outline:3px solid var(--amber);outline-offset:2px;
+}
+.fld input:focus{outline:none;border-color:var(--clay);box-shadow:0 0 0 4px rgba(13,148,136,0.15)}
 
-.row{padding:16px 0;border-bottom:1px solid var(--line)}
+.row{padding:16px 0;border-bottom:2px dashed var(--line)}
 .row:last-child{border-bottom:none}
 .qt{font-size:15.5px;margin-bottom:12px;font-weight:600;line-height:1.4}
 .sc{display:flex;gap:6px}
 .sb{
-  flex:1;height:56px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
+  flex:1;height:58px;border:2px solid var(--line);border-radius:14px;background:#fff;
   font-size:20px;cursor:pointer;color:var(--muted);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
   transition:transform .12s, border-color .15s, background .15s, box-shadow .15s;
 }
-.sb .n{font-size:10px;font-weight:700;opacity:.55}
-.sb:active{transform:scale(0.93)}
+.sb .n{font-size:10px;font-weight:800;opacity:.55}
+.sb:active{transform:translateY(2px)}
 .sb.on{
-  background:linear-gradient(160deg, var(--mint), var(--mint-d));border-color:var(--mint-d);color:#fff;
-  box-shadow:0 8px 16px -6px rgba(15,110,86,0.5);transform:scale(1.04);
+  background:linear-gradient(160deg, var(--clay), var(--clay-d));border-color:var(--clay-d);color:#fff;
+  box-shadow:var(--shadow-outer-sm);transform:translateY(-2px);
 }
-.sb.on .n{opacity:.85}
-.sl{display:flex;justify-content:space-between;font-size:10.5px;color:#9aa8a2;margin-top:6px;font-weight:600}
+.sb.on .n{opacity:.9}
+.sl{display:flex;justify-content:space-between;font-size:10.5px;color:#8CA39D;margin-top:6px;font-weight:700}
 
 .vo{
-  display:flex;align-items:center;gap:14px;padding:16px;border:2px solid var(--line);border-radius:16px;
+  display:flex;align-items:center;gap:14px;padding:16px;border:2px solid var(--line);border-radius:18px;
   margin-bottom:10px;cursor:pointer;background:#fff;
   transition:transform .12s, border-color .15s, background .15s, box-shadow .2s;
   user-select:none;
 }
-.vo:active{transform:scale(0.98)}
+.vo:active{transform:translateY(2px)}
 .vo .badge{
-  width:34px;height:34px;border-radius:50%;border:2px dashed #c7d3cc;
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#b6c2bb;
+  width:36px;height:36px;border-radius:50%;border:2px dashed #A9C9C3;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#8CA39D;
   flex-shrink:0;transition:all .2s cubic-bezier(.22,1,.36,1);
 }
 .vl{flex:1;font-size:14.5px;font-weight:600;line-height:1.4}
-.vo.r1{border-color:var(--gold);background:linear-gradient(90deg, #fff9ec, #fff)}
+.vo.r1{border-color:var(--gold);background:linear-gradient(90deg, #FFF9EC, #fff);box-shadow:var(--shadow-outer-sm)}
 .vo.r1 .badge{background:var(--gold);border-style:solid;border-color:var(--gold);color:#fff;transform:scale(1.1)}
-.vo.r2{border-color:var(--silver);background:linear-gradient(90deg, #f5f7f9, #fff)}
+.vo.r2{border-color:var(--silver);background:linear-gradient(90deg, #F5F7F9, #fff)}
 .vo.r2 .badge{background:var(--silver);border-style:solid;border-color:var(--silver);color:#fff;transform:scale(1.05)}
-.vo.r3{border-color:var(--bronze);background:linear-gradient(90deg, #fbf1e8, #fff)}
+.vo.r3{border-color:var(--bronze);background:linear-gradient(90deg, #FBF1E8, #fff)}
 .vo.r3 .badge{background:var(--bronze);border-style:solid;border-color:var(--bronze);color:#fff}
 
 .btnrow{display:flex;gap:10px;margin-top:22px}
 .btn{
-  flex:1;height:52px;border:none;border-radius:14px;font-size:15.5px;font-weight:700;cursor:pointer;
-  font-family:'Baloo 2',sans-serif;transition:transform .12s, box-shadow .15s;
+  flex:1;height:54px;border:var(--border-w) solid transparent;border-radius:16px;font-size:15.5px;font-weight:600;cursor:pointer;
+  font-family:'Fredoka',sans-serif;transition:transform .1s, box-shadow .1s;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
 }
-.btn:active{transform:scale(0.97)}
-.btn.primary{background:linear-gradient(135deg, var(--mint), var(--mint-d));color:#fff;box-shadow:0 10px 22px -8px rgba(15,110,86,0.6)}
-.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--muted)}
+.btn:active{transform:translateY(3px);box-shadow:none !important}
+.btn.primary{background:var(--clay);border-color:var(--clay-d);color:#fff;box-shadow:var(--shadow-outer-sm)}
+.btn.ghost{background:#fff;border-color:var(--line);color:var(--muted)}
 .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .chip{
-  display:inline-block;background:var(--mint-l);color:var(--mint-d);font-size:12.5px;font-weight:700;
-  padding:6px 14px;border-radius:20px;margin-bottom:10px;
+  display:inline-flex;align-items:center;gap:6px;background:var(--clay-l);color:var(--clay-d);font-size:12.5px;font-weight:700;
+  padding:7px 14px;border-radius:20px;margin-bottom:10px;border:2px solid var(--line);
 }
 .result{text-align:center;padding:36px 20px}
-.result .emoji{font-size:48px;margin-bottom:6px;animation:pop .4s cubic-bezier(.22,1,.36,1) both}
+.result .emoji{font-size:48px;margin-bottom:6px;animation:pop .45s cubic-bezier(.34,1.56,.64,1) both}
 @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
-.result .code{font-size:34px;font-weight:800;margin:12px 0;color:var(--mint-d)}
-.err{color:#c0392b;font-size:13px;margin-top:10px;font-weight:600}
+.result .code{font-size:34px;font-weight:700;margin:12px 0;color:var(--clay-d);font-family:'Fredoka',sans-serif}
+.err{color:var(--danger);font-size:13px;margin-top:10px;font-weight:700;display:flex;align-items:center;gap:6px}
 
 #step-diem .row2{display:flex;gap:8px;align-items:center;margin-bottom:10px}
-#step-diem .row2 input[type=text]{flex:1;height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;font-family:inherit}
-#step-diem .row2 input[type=number]{width:84px;height:44px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font-family:inherit}
-#step-diem .row2 button{border:none;background:#fdeceb;color:#c0392b;border-radius:10px;height:44px;width:44px;cursor:pointer;font-size:18px;transition:transform .12s}
-#step-diem .row2 button:active{transform:scale(0.9)}
-.addbtn{margin-top:6px;background:#fff;border:1.5px dashed var(--line);border-radius:12px;height:46px;width:100%;color:var(--muted);cursor:pointer;font-weight:600;transition:border-color .15s, color .15s}
-.addbtn:hover{border-color:var(--mint);color:var(--mint-d)}
-.ocr-box{margin-bottom:16px;padding:14px;border-radius:14px;background:var(--mint-l);border:1.5px dashed var(--mint)}
-.ocr-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:46px;border-radius:12px;background:linear-gradient(135deg, var(--mint), var(--mint-d));color:#fff;font-weight:700;cursor:pointer;font-size:14.5px;transition:transform .12s}
-.ocr-btn:active{transform:scale(0.97)}
-.ocr-btn.disabled{background:#cbd5cf;cursor:not-allowed}
-.ocr-note{font-size:12px;color:var(--mint-d);margin-top:8px;text-align:center}
-.ocr-status{font-size:13px;margin-top:8px;text-align:center;font-weight:600;min-height:16px}
-.ocr-status.loading{color:var(--mint-d)}
-.ocr-status.error{color:#c0392b}
-.ocr-status.ok{color:var(--mint-d)}
+#step-diem .row2 input[type=text]{flex:1;height:46px;border:2px solid var(--line);border-radius:12px;padding:0 12px;font-family:inherit}
+#step-diem .row2 input[type=number]{width:88px;height:46px;border:2px solid var(--line);border-radius:12px;padding:0 10px;font-family:inherit}
+#step-diem .row2 button{border:2px solid #F6C9C3;background:var(--danger-l);color:var(--danger);border-radius:12px;height:46px;width:46px;cursor:pointer;font-size:18px;transition:transform .1s}
+#step-diem .row2 button:active{transform:translateY(2px)}
+.addbtn{margin-top:6px;background:#fff;border:2px dashed var(--line);border-radius:14px;height:48px;width:100%;color:var(--muted);cursor:pointer;font-weight:700;transition:border-color .15s, color .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.addbtn:hover{border-color:var(--clay);color:var(--clay-d)}
+.ocr-box{margin-bottom:16px;padding:14px;border-radius:16px;background:var(--amber-l);border:2px dashed var(--amber)}
+.ocr-btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;background:var(--amber);border:2px solid var(--amber-d);color:#fff;font-weight:600;font-family:'Fredoka',sans-serif;cursor:pointer;font-size:14.5px;transition:transform .1s}
+.ocr-btn:active{transform:translateY(2px)}
+.ocr-btn.disabled{background:#cbd5cf;border-color:#b7c0bd;cursor:not-allowed}
+.ocr-note{font-size:12px;color:var(--amber-d);margin-top:8px;text-align:center}
+.ocr-status{font-size:13px;margin-top:8px;text-align:center;font-weight:700;min-height:16px;display:flex;align-items:center;justify-content:center;gap:6px}
+.ocr-status.loading{color:var(--amber-d)}
+.ocr-status.error{color:var(--danger)}
+.ocr-status.ok{color:var(--clay-d)}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
+}
 </style>
 </head>
 <body>
@@ -172,17 +188,17 @@ h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,s
     <div id="step-giatri" style="display:none"></div>
 
     <div id="step-diem" style="display:none">
-      <div class="chip">📊 Bảng điểm các môn</div>
+      <div class="chip" id="chipDiem"></div>
       <div class="ocr-box">
         <label class="ocr-btn" id="ocrLabel">
-          📷 Tải ảnh/PDF bảng điểm — AI tự điền giúp
+          <span id="ocrLabelText"></span>
           <input type="file" id="ocrFile" accept="image/*,.pdf" style="display:none">
         </label>
         <div class="ocr-note">Chụp ảnh rõ nét hoặc PDF bảng điểm; AI đọc xong em vẫn xem lại và sửa được trước khi nộp.</div>
         <div class="ocr-status" id="ocrStatus"></div>
       </div>
       <div id="diemRows"></div>
-      <button class="addbtn" onclick="addDiemRow()">+ Thêm môn</button>
+      <button class="addbtn" id="addDiemBtn" onclick="addDiemRow()"></button>
     </div>
 
     <div id="step-result" style="display:none" class="result"></div>
@@ -197,6 +213,22 @@ h1,h2,.brand,.chip,.code,.qt,.vl,.result-title{font-family:'Baloo 2',system-ui,s
 </div>
 
 <script>
+// Bo icon SVG nho gon (Phosphor-style, inline de app tu chua khong goi CDN ngoai)
+const ICON = {
+  target: '<svg class="ic" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16"><circle cx="128" cy="128" r="96"/><circle cx="128" cy="128" r="56"/><circle cx="128" cy="128" r="16" fill="currentColor" stroke="none"/></svg>',
+  gem: '<svg class="ic" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linejoin="round"><path d="M56 96 L128 32 L200 96 L128 224 Z"/><path d="M56 96 L200 96"/><path d="M100 96 L128 32 L156 96"/></svg>',
+  chart: '<svg class="ic" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"><line x1="40" y1="216" x2="40" y2="40"/><line x1="40" y1="216" x2="216" y2="216"/><line x1="88" y1="176" x2="88" y2="128"/><line x1="140" y1="176" x2="140" y2="96"/><line x1="192" y1="176" x2="192" y2="64"/></svg>',
+  upload: '<svg class="ic" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 160 L128 48"/><path d="M80 96 L128 48 L176 96"/><path d="M48 176 L48 208 L208 208 L208 176"/></svg>',
+  hourglass: '<svg class="ic" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M64 32 L192 32 L192 72 L128 128 L192 184 L192 224 L64 224 L64 184 L128 128 L64 72 Z"/></svg>',
+  checkCircle: '<svg class="ic" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><path d="M88 132 L116 160 L172 100"/></svg>',
+  warning: '<svg class="ic" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 40 L232 216 L24 216 Z"/><line x1="128" y1="104" x2="128" y2="148"/><circle cx="128" cy="180" r="1" fill="currentColor" stroke="currentColor" stroke-width="10"/></svg>',
+  lock: '<svg class="ic" width="14" height="14" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="56" y="112" width="144" height="104" rx="12"/><path d="M88 112 L88 72 a40 40 0 0 1 80 0 L168 112"/></svg>',
+  file: '<svg class="ic" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M64 32 L152 32 L200 80 L200 224 L64 224 Z"/><path d="M152 32 L152 80 L200 80"/></svg>',
+  wave: '<svg class="ic" width="18" height="18" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M40 216 L40 96 a24 24 0 0 1 48 0 L88 152"/><path d="M88 152 L88 72 a24 24 0 0 1 48 0 l0 40"/><path d="M136 112 a24 24 0 0 1 48 0 l0 60"/><path d="M184 132 a24 24 0 0 1 32 20 l0 24 a40 40 0 0 1 -40 40 L120 216 a56 56 0 0 1 -48 -28 L48 156"/></svg>',
+  point: '<svg class="ic" width="16" height="16" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M104 216 L64 152 a20 20 0 0 1 30 -24 l26 34 l0 -108 a18 18 0 0 1 36 0 l0 72 a16 16 0 0 1 32 0 l0 8 a16 16 0 0 1 32 0 l0 16 a72 72 0 0 1 -72 72 Z"/></svg>',
+  sparkle: '<svg class="ic" width="42" height="42" viewBox="0 0 256 256" fill="currentColor"><path d="M128 24 L146 106 L228 128 L146 150 L128 232 L110 150 L28 128 L110 106 Z"/></svg>',
+};
+
 const CHANG_TITLES = [
   "Em thử hình dung mình đang...",
   "Cuối tuần rảnh, em thấy hứng thú khi...",
@@ -280,7 +312,7 @@ function renderHolland(){
   show('step-holland');
   const qs = quiz.holland.filter(q=>q.chang === changIdx+1);
   const box = document.getElementById('step-holland');
-  box.innerHTML = '<div class="chip">🎯 Chặng '+(changIdx+1)+' / 6</div><div style="font-size:15px;color:var(--muted);margin-bottom:6px;font-weight:600">'+CHANG_TITLES[changIdx]+'</div>';
+  box.innerHTML = '<div class="chip">'+ICON.target+' Chặng '+(changIdx+1)+' / 6</div><div style="font-size:15px;color:var(--muted);margin-bottom:6px;font-weight:700">'+CHANG_TITLES[changIdx]+'</div>';
   qs.forEach(q=>{
     const row = document.createElement('div'); row.className='row';
     const cur = state.holland_answers[q.id];
@@ -306,11 +338,12 @@ function renderGiaTri(){
   show('step-giatri');
   const group = quiz.gia_tri_groups[gtIdx];
   const box = document.getElementById('step-giatri');
-  box.innerHTML = '<div class="chip">💎 Giá trị nghề · nhóm '+(gtIdx+1)+' / 3</div>'+
-    '<div style="font-size:15px;color:var(--muted);margin-bottom:8px;font-weight:600">'+group.nhom+'</div>'+
-    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">👆 Bấm vào ý <b>quan trọng nhất với em</b> trước, rồi đến ý nhì, rồi ý ba. Bấm lại một ý để bỏ chọn.</div>';
+  box.innerHTML = '<div class="chip">'+ICON.gem+' Giá trị nghề · nhóm '+(gtIdx+1)+' / 3</div>'+
+    '<div style="font-size:15px;color:var(--muted);margin-bottom:8px;font-weight:700">'+group.nhom+'</div>'+
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:14px;display:flex;align-items:flex-start;gap:6px">'+ICON.point+' <span>Bấm vào ý <b>quan trọng nhất với em</b> trước, rồi đến ý nhì, rồi ý ba. Bấm lại một ý để bỏ chọn.</span></div>';
   group.items.forEach(item=>{
     const row = document.createElement('div'); row.className='vo'; row.dataset.key = item.key;
+    row.setAttribute('tabindex', '0');
     row.innerHTML = '<div class="badge">?</div><div class="vl">'+item.label+'</div>';
     box.appendChild(row);
   });
@@ -331,23 +364,28 @@ function renderGiaTri(){
   }
   paint();
 
+  function toggleRank(el){
+    const key = el.dataset.key;
+    const ranks = state.gia_tri_rankings[gtIdx];
+    if(ranks[key]){
+      // bỏ chọn ý này, dồn lại thứ hạng các ý xếp sau nó
+      const removed = ranks[key];
+      delete ranks[key];
+      Object.keys(ranks).forEach(k=>{ if(ranks[k] > removed) ranks[k]--; });
+    } else {
+      const usedCount = Object.keys(ranks).length;
+      if(usedCount >= group.items.length) return; // đã đủ hạng
+      ranks[key] = usedCount + 1;
+    }
+    paint();
+    setErr('');
+    saveProgress();
+  }
+
   box.querySelectorAll('.vo').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      const key = el.dataset.key;
-      const ranks = state.gia_tri_rankings[gtIdx];
-      if(ranks[key]){
-        // bỏ chọn ý này, dồn lại thứ hạng các ý xếp sau nó
-        const removed = ranks[key];
-        delete ranks[key];
-        Object.keys(ranks).forEach(k=>{ if(ranks[k] > removed) ranks[k]--; });
-      } else {
-        const usedCount = Object.keys(ranks).length;
-        if(usedCount >= group.items.length) return; // đã đủ hạng
-        ranks[key] = usedCount + 1;
-      }
-      paint();
-      setErr('');
-      saveProgress();
+    el.addEventListener('click', ()=>toggleRank(el));
+    el.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggleRank(el); }
     });
   });
 
@@ -369,13 +407,16 @@ function addDiemRow(mon, diem){
   const row = document.createElement('div'); row.className='row2';
   row.innerHTML = '<input type="text" placeholder="Tên môn (vd: Toán)" value="'+(mon||'')+'">'+
     '<input type="number" step="0.1" min="0" max="10" placeholder="Điểm" value="'+(diem!=null?diem:'')+'">'+
-    '<button type="button" onclick="this.parentElement.remove(); syncDiemDraft()">×</button>';
+    '<button type="button" aria-label="Xóa môn này" onclick="this.parentElement.remove(); syncDiemDraft()">×</button>';
   row.querySelectorAll('input').forEach(inp=>inp.addEventListener('input', syncDiemDraft));
   wrap.appendChild(row);
 }
 
 function renderDiem(){
   show('step-diem');
+  document.getElementById('chipDiem').innerHTML = ICON.chart+' Bảng điểm các môn';
+  document.getElementById('ocrLabelText').innerHTML = ICON.upload+' Tải ảnh/PDF bảng điểm — AI tự điền giúp';
+  document.getElementById('addDiemBtn').innerHTML = '+ Thêm môn';
   const wrap = document.getElementById('diemRows');
   wrap.innerHTML = '';
   if(state.diem_draft && state.diem_draft.length){
@@ -398,7 +439,7 @@ async function handleOcrUpload(e){
   const labelEl = document.getElementById('ocrLabel');
   labelEl.classList.add('disabled');
   statusEl.className = 'ocr-status loading';
-  statusEl.textContent = '⏳ Đang đọc ảnh, mất khoảng 10-20 giây...';
+  statusEl.innerHTML = ICON.hourglass+' Đang đọc ảnh, mất khoảng 10-20 giây...';
 
   try{
     const form = new FormData();
@@ -407,7 +448,7 @@ async function handleOcrUpload(e){
     const data = await r.json();
     if(!data.ok){
       statusEl.className = 'ocr-status error';
-      statusEl.textContent = '⚠️ ' + (data.loi || 'Không đọc được file này, hãy nhập tay.');
+      statusEl.innerHTML = ICON.warning+' '+(data.loi || 'Không đọc được file này, hãy nhập tay.');
       return;
     }
     const wrap = document.getElementById('diemRows');
@@ -415,10 +456,10 @@ async function handleOcrUpload(e){
     data.diem.forEach(([mon, diem]) => addDiemRow(mon, diem));
     syncDiemDraft();
     statusEl.className = 'ocr-status ok';
-    statusEl.textContent = '✅ Đã điền '+data.diem.length+' môn — kiểm tra lại và sửa nếu AI đọc sai nhé.';
+    statusEl.innerHTML = ICON.checkCircle+' Đã điền '+data.diem.length+' môn — kiểm tra lại và sửa nếu AI đọc sai nhé.';
   }catch(err){
     statusEl.className = 'ocr-status error';
-    statusEl.textContent = '⚠️ Có lỗi khi tải/đọc file, hãy nhập tay.';
+    statusEl.innerHTML = ICON.warning+' Có lỗi khi tải/đọc file, hãy nhập tay.';
   }finally{
     labelEl.classList.remove('disabled');
   }
@@ -436,7 +477,10 @@ function collectDiem(){
   return out;
 }
 
-function setErr(msg){ document.getElementById('err').textContent = msg||''; }
+function setErr(msg){
+  const el = document.getElementById('err');
+  el.innerHTML = msg ? (ICON.warning+' '+msg) : '';
+}
 
 async function submitAll(){
   setErr('');
@@ -458,11 +502,11 @@ async function submitAll(){
     updateBar(100, 'Hoàn tất');
     document.getElementById('hint').textContent = '';
     document.getElementById('step-result').innerHTML =
-      '<div class="emoji">🎉</div>'+
+      '<div class="emoji" style="color:var(--amber)">'+ICON.sparkle+'</div>'+
       '<div class="chip">Mã Holland của em</div>'+
       '<div class="code">'+data.ma_holland+'</div>'+
-      (data.do_tin_cay ? '' : '<div style="color:var(--amber);font-size:13px;margin-bottom:10px;font-weight:600">Một vài câu trả lời chưa thật nhất quán — kết quả chỉ mang tính tham khảo.</div>')+
-      '<a class="btn primary" style="display:inline-block;text-decoration:none;line-height:52px;padding:0 28px" href="'+data.pdf_url+'" target="_blank">📄 Tải hồ sơ PDF</a>';
+      (data.do_tin_cay ? '' : '<div style="color:var(--amber-d);font-size:13px;margin-bottom:10px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px">'+ICON.warning+' Một vài câu trả lời chưa thật nhất quán — kết quả chỉ mang tính tham khảo.</div>')+
+      '<a class="btn primary" style="display:inline-flex;text-decoration:none;padding:0 28px;height:54px" href="'+data.pdf_url+'" target="_blank">'+ICON.file+' Tải hồ sơ PDF</a>';
     document.getElementById('navRow').style.display = 'none';
     clearProgress();
   }catch(e){
@@ -539,8 +583,8 @@ function showResumeChoice(saved){
   document.getElementById('navRow').style.display = 'none';
   document.getElementById('step-resume').innerHTML =
     '<div style="text-align:center;padding:12px 4px">'+
-      '<div class="emoji" style="font-size:40px;margin-bottom:10px">👋</div>'+
-      '<div style="font-size:17px;font-weight:700;font-family:\'Baloo 2\',sans-serif;margin-bottom:8px">Em đang làm dở bài trước đó'+(saved.state.ho_ten ? ' — '+saved.state.ho_ten : '')+'</div>'+
+      '<div class="emoji" style="color:var(--clay-d)">'+ICON.wave+'</div>'+
+      '<div style="font-size:17px;font-weight:600;font-family:\'Fredoka\',sans-serif;margin-bottom:8px">Em đang làm dở bài trước đó'+(saved.state.ho_ten ? ' — '+saved.state.ho_ten : '')+'</div>'+
       '<div style="font-size:13.5px;color:var(--muted);margin-bottom:20px">Muốn làm tiếp từ chỗ đã dừng hay bắt đầu lại từ đầu?</div>'+
       '<div class="btnrow" style="margin-top:0">'+
         '<button type="button" class="btn ghost" id="btnRestart">Làm lại từ đầu</button>'+
